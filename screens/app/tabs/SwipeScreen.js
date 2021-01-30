@@ -3,18 +3,10 @@ import { StyleSheet, Text, View, StatusBar } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from "@react-navigation/native";
+import PedometerView from "../../../components/PedometerView";
 
 export const SwipeScreen = ({ navigation }) => {
-  const { colors } = useTheme();
-
-  const theme = useTheme();
-
-  return (
-    <View style={styles.container}>
-      <StatusBar barStyle={theme.dark ? "dark-content" : "light-content"} />
-      <Text style={{ color: colors.text }}>Swipe screen</Text>
-    </View>
-  );
+  return <PedometerView />;
 };
 
 const SwipeStack = createStackNavigator();

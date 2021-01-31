@@ -60,7 +60,7 @@ export default class PedometerView extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View>
         <Text>
           Pedometer.isAvailableAsync(): {this.state.isPedometerAvailable}
         </Text>
@@ -72,11 +72,3 @@ export default class PedometerView extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

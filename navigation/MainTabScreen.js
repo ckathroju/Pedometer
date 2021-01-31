@@ -1,17 +1,17 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import SwipeStackScreen from "../screens/app/tabs/SwipeScreen";
-import WatchListStackScreen from "../screens/app/tabs/WatchListScreen";
-import ApprovedStackScreen from "../screens/app/tabs/ApprovedScreen";
-import DisapprovedStackScreen from "../screens/app/tabs/DisapprovedScreen";
-import SeenStackScreen from "../screens/app/tabs/SeenScreen";
+import SwipeStackScreen from "../screens/loggedIn/tabs/SwipeScreen";
+import WatchListStackScreen from "../screens/loggedIn/tabs/WatchListScreen";
+import ApprovedStackScreen from "../screens/loggedIn/tabs/ApprovedScreen";
+import DisapprovedStackScreen from "../screens/loggedIn/tabs/DisapprovedScreen";
+import SeenStackScreen from "../screens/loggedIn/tabs/SeenScreen";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from "@react-navigation/native";
 import TabBarContent from "./TabBarContent";
-import FilterStackScreen from "../screens/app/drawer/FilterScreen";
-import ProfileStackScreen from "../screens/app/drawer/ProfileScreen";
-import SupportStackScreen from "../screens/app/drawer/SupportScreen";
-import AboutStackScreen from "../screens/app/drawer/AboutScreen";
+import FilterStackScreen from "../screens/loggedIn/drawer/FilterScreen";
+import ProfileStackScreen from "../screens/loggedIn/drawer/ProfileScreen";
+import SupportStackScreen from "../screens/loggedIn/drawer/SupportScreen";
+import AboutStackScreen from "../screens/loggedIn/drawer/AboutScreen";
 
 const Tab = createBottomTabNavigator();
 

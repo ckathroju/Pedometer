@@ -1,8 +1,10 @@
 import { PEDOMETER_ACTIONS } from "../actions/actions";
 
 const initialState = {
-  currentSteps: 0,
-  pastSteps: 0,
+  currentAppStepCount: 0,
+  currentDayStepCount: 0,
+  yesterdayStepCount: 0,
+  goal: 10000,
 };
 
 const pedometerReducer = (state = initialState, action) => {
@@ -10,12 +12,17 @@ const pedometerReducer = (state = initialState, action) => {
     case PEDOMETER_ACTIONS.SET_PAST_STEPS:
       return {
         ...state,
-        pastSteps: action.payload,
+        yesterdayStepCount: action.payload,
       };
-    case PEDOMETER_ACTIONS.SET_CURRENT_STEPS:
+    case PEDOMETER_ACTIONS.SET_CURRENT_APP_STEPS:
       return {
         ...state,
-        currentSteps: action.payload,
+        currentAppStepCount: action.payload,
+      };
+    case PEDOMETER_ACTIONS.SET_CURRENT_DAY_STEPS:
+      return {
+        ...state,
+        currentDayStepCount: action.payload,
       };
     default:
       return state;

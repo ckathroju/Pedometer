@@ -165,7 +165,7 @@ const RootContainer = () => {
             <Drawer.Navigator
               drawerContent={(props) => <DrawerContent {...props} />}
             >
-              <Drawer.Screen name="SwipeDrawer" component={MainTabScreen} />
+              <Drawer.Screen name="PedometerDrawer" component={MainTabScreen} />
             </Drawer.Navigator>
           ) : (
             <RootStackScreen />

@@ -1,74 +1,85 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Pedometer } from "expo-legacy";
+import { useDispatch } from "react-redux";
+import {
+  setYesterdayStepCount,
+  setCurrentAppStepCount,
+  setCurrentDayStepCount,
+} from "../store/actions/pedometer";
 
-export default class PedometerView extends React.Component {
-  state = {
-    isPedometerAvailable: "checking",
-    pastStepCount: 0,
-    currentStepCount: 0,
-  };
+export default function App() {
+  const [isPedometerAvailable, setIsPedometerAvailable] = useState("checking");
+  const dispatch = useDispatch();
 
-  componentDidMount() {
-    this._subscribe();
-  }
+  let _subscription;
 
-  componentWillUnmount() {
-    this._unsubscribe();
-  }
-
-  _subscribe = () => {
-    this._subscription = Pedometer.watchStepCount((result) => {
-      this.setState({
-        currentStepCount: result.steps,
-      });
+  const _subscribe = () => {
+    _subscription = Pedometer.watchStepCount((result) => {
+      dispatch(setCurrentAppStepCount(result.steps));
     });
 
+    // Get current day steps while app is open
     Pedometer.isAvailableAsync().then(
       (result) => {
-        this.setState({
-          isPedometerAvailable: String(result),
-        });
+        setIsPedometerAvailable(result);
       },
       (error) => {
-        this.setState({
-          isPedometerAvailable: "Could not get isPedometerAvailable: " + error,
-        });
+        setIsPedometerAvailable("Could not get isPedometerAvailable: " + error);
       }
     );
 
-    const end = new Date();
-    const start = new Date();
-    start.setDate(end.getDate() - 1);
-    Pedometer.getStepCountAsync(start, end).then(
+    // Get current day steps before app was open
+    const currentDayStart = new Date();
+    currentDayStart.setHours(0, 0, 0, 0);
+    const currentDayEnd = new Date();
+    Pedometer.getStepCountAsync(currentDayStart, currentDayEnd).then(
       (result) => {
-        console.log("Response" + JSON.stringify(result));
-        this.setState({ pastStepCount: result.steps });
+        dispatch(setCurrentDayStepCount(result.steps));
       },
       (error) => {
-        this.setState({
-          pastStepCount: "Could not get stepCount: " + error,
-        });
+        // setPastStepCount("Could not get stepCount: " + error);
+      }
+    );
+
+    // Get yesterdays steps
+    let yesterdayStart = new Date();
+    yesterdayStart.setHours(0, 0, 0, 0);
+    yesterdayStart = yesterdayStart.getDate() - 1;
+    const yesterdayEnd = new Date();
+    yesterdayEnd.setHours(0, 0, 0, 0);
+    Pedometer.getStepCountAsync(yesterdayStart, yesterdayEnd).then(
+      (result) => {
+        dispatch(setYesterdayStepCount(result.steps));
+      },
+      (error) => {
+        // setPastStepCount("Could not get stepCount: " + error);
       }
     );
   };
 
-  _unsubscribe = () => {
-    this._subscription && this._subscription.remove();
-    this._subscription = null;
+  const _unsubscribe = () => {
+    _subscription && _subscription.remove();
+    _subscription = null;
   };
 
-  render() {
-    return (
-      <View>
-        <Text>
-          Pedometer.isAvailableAsync(): {this.state.isPedometerAvailable}
-        </Text>
-        <Text>
-          Steps taken in the last 24 hours: {this.state.pastStepCount}
-        </Text>
-        <Text>Walk! And watch this go up: {this.state.currentStepCount}</Text>
-      </View>
-    );
-  }
+  useEffect(() => {
+    _subscribe();
+    return () => _unsubscribe();
+  }, []);
+
+  return (
+    <View style={styles.container}>
+      <Text>Pedometer.isAvailableAsync(): {isPedometerAvailable}</Text>
+    </View>
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: 15,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});

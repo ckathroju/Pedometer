@@ -1,6 +1,6 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import SwipeStackScreen from "../screens/loggedIn/tabs/SwipeScreen";
+import PedometerStackScreen from "../screens/loggedIn/tabs/PedometerScreen";
 import WatchListStackScreen from "../screens/loggedIn/tabs/WatchListScreen";
 import ApprovedStackScreen from "../screens/loggedIn/tabs/ApprovedScreen";
 import DisapprovedStackScreen from "../screens/loggedIn/tabs/DisapprovedScreen";
@@ -19,16 +19,16 @@ const MainTabScreen = () => {
   const { colors } = useTheme();
   return (
     <Tab.Navigator
-      initialRouteName="Swipe"
+      initialRouteName="Pedometer"
       activeColor={colors.components.activeTab}
       tabBar={(props) => <TabBarContent {...props} />}
     >
       <Tab.Screen
-        name="Swipe"
-        component={SwipeStackScreen}
+        name="Pedometer"
+        component={PedometerStackScreen}
         options={{
-          tabBarLabel: "Swipe",
-          tabBarColor: colors.tabs.swipe,
+          tabBarLabel: "Pedometer",
+          tabBarColor: colors.tabs.pedometer,
           tabBarIcon: ({ color }) => (
             <Icon name="cards-outline" color={color} size={26} />
           ),

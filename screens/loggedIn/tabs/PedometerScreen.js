@@ -5,50 +5,65 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from "@react-navigation/native";
 import PedometerView from "../../../components/PedometerView";
 import DonutChart from "../../../components/DonutChart";
+import { useSelector } from "react-redux";
 
-export const SwipeScreen = ({ navigation }) => {
+export const PedometerScreen = ({ navigation }) => {
+  const currentAppStepCount = useSelector(
+    (state) => state.pedometer.currentAppStepCount
+  );
+  const currentDayStepCount = useSelector(
+    (state) => state.pedometer.currentDayStepCount
+  );
+  const setYesterdayStepCount = useSelector(
+    (state) => state.pedometer.yesterdayStepCount
+  );
+  const goal = useSelector((state) => state.pedometer.goal);
+
   return (
     <View style={styles.container}>
-      <DonutChart />
+      <DonutChart
+        value={currentAppStepCount + currentDayStepCount}
+        goal={goal}
+      />
       <PedometerView />
     </View>
   );
 };
 
-const SwipeStack = createStackNavigator();
+const PedometerStack = createStackNavigator();
 
-const SwipeStackScreen = ({ navigation }) => {
+const PedometerStackScreen = ({ navigation }) => {
   const { colors } = useTheme();
 
   return (
-    <SwipeStack.Navigator
+    <PedometerStack.Navigator
       screenOptions={{
         headerStyle: {
-          backgroundColor: colors.tabs.swipe,
+          backgroundColor: colors.tabs.pedometer,
         },
         headerTintColor: colors.components.headerTintColor,
       }}
     >
-      <SwipeStack.Screen
-        name="Swipe"
-        component={SwipeScreen}
+      <PedometerStack.Screen
+        name="Pedometer"
+        component={PedometerScreen}
         options={{
-          title: "Swipe",
+          title: "Pedometer",
           headerLeft: () => (
             <Icon.Button
               name="menu"
               size={25}
-              backgroundColor={colors.tabs.swipe}
+              backgroundColor={colors.tabs.pedometer}
               onPress={() => navigation.openDrawer()}
             ></Icon.Button>
           ),
         }}
       />
-    </SwipeStack.Navigator>
+    </PedometerStack.Navigator>
   );
 };
 
-export default SwipeStackScreen;
+export default PedometerStackScreen;
 
 const styles = StyleSheet.create({
   container: {

@@ -18,7 +18,7 @@ const ThemeExtras = {
     headerTintColor: "#fff",
   },
   tabs: {
-    swipe: "#8bc34a",
+    pedometer: "#8bc34a",
     approved: "#2196f3",
     disapproved: "#3f51b5",
     seen: "#673ab7",

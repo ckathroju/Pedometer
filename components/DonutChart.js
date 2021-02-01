@@ -3,14 +3,9 @@ import { StyleSheet, Text, View } from "react-native";
 import { VictoryPie } from "victory-native";
 
 const DonutChart = (props) => {
-  const graphicData = [
-    { y: 10, x: "5%" },
-    { y: 90, x: "90%" },
-    { y: 50, x: "50%" },
-    { y: 20, x: "20%" },
-    { y: 70, x: "70%" },
-  ];
-  const graphicColor = ["red", "blue", "yellow", "green", "tomato"];
+  const { value, goal } = props;
+  const graphicData = [{ y: value }, { y: goal - value }];
+  const graphicColor = ["lightgreen", "red"];
 
   return (
     <View>
@@ -20,13 +15,7 @@ const DonutChart = (props) => {
         width={350}
         height={350}
         innerRadius={90}
-        style={{
-          labels: {
-            fill: "white",
-            fontSize: 15,
-            padding: 7,
-          },
-        }}
+        labels={() => null}
       />
       <Text
         style={{
@@ -37,8 +26,7 @@ const DonutChart = (props) => {
           fontSize: 60,
         }}
       >
-        {" "}
-        85%{" "}
+        {` ${value} `}
       </Text>
     </View>
   );

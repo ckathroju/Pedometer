@@ -4,48 +4,48 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from "@react-navigation/native";
 
-export const SeenScreen = ({ navigation }) => {
+export const TabScreen2 = ({ navigation }) => {
   const { colors } = useTheme();
   const theme = useTheme();
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle={theme.dark ? "dark-content" : "light-content"} />
-      <Text style={{ color: colors.text }}>Seen screen</Text>
+      <Text style={{ color: colors.text }}>Tab2</Text>
     </View>
   );
 };
 
-const SeenStack = createStackNavigator();
+const TabStack2 = createStackNavigator();
 
-const SeenStackScreen = ({ navigation }) => {
+const TabStackScreen2 = ({ navigation }) => {
   const { colors } = useTheme();
 
   return (
-    <SeenStack.Navigator
+    <TabStack2.Navigator
       screenOptions={{
         headerStyle: {
-          backgroundColor: colors.tabs.seen,
+          backgroundColor: colors.tabs.tab2,
         },
         headerTintColor: colors.components.headerTintColor,
       }}
     >
-      <SeenStack.Screen
-        name="Seen"
-        component={SeenScreen}
+      <TabStack2.Screen
+        name="Tab2"
+        component={TabScreen2}
         options={{
-          title: "Seen",
+          title: "Tab2",
           headerLeft: () => (
             <Icon.Button
               name="menu"
               size={25}
-              backgroundColor={colors.tabs.seen}
+              backgroundColor={colors.tabs.tab2}
               onPress={() => navigation.openDrawer()}
             ></Icon.Button>
           ),
         }}
       />
-    </SeenStack.Navigator>
+    </TabStack2.Navigator>
   );
 };
 
@@ -57,4 +57,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SeenStackScreen;
+export default TabStackScreen2;

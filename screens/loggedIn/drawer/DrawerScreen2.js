@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from "@react-navigation/native";
 
-export const FilterScreen = ({ navigation }) => {
+export const DrawerScreen2 = ({ navigation }) => {
   const { colors } = useTheme();
 
   const theme = useTheme();
@@ -12,15 +12,15 @@ export const FilterScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle={theme.dark ? "dark-content" : "light-content"} />
-      <Text style={{ color: colors.text }}>Filter Screen</Text>
+      <Text style={{ color: colors.text }}>Drawer2</Text>
     </View>
   );
 };
 
-const FilterStack = createStackNavigator();
+const DrawerStack2 = createStackNavigator();
 
-const FilterStackScreen = ({ navigation }) => (
-  <FilterStack.Navigator
+const DrawerStackScreen2 = ({ navigation }) => (
+  <DrawerStack2.Navigator
     screenOptions={{
       headerStyle: {
         backgroundColor: "#8bc34a",
@@ -28,11 +28,11 @@ const FilterStackScreen = ({ navigation }) => (
       headerTintColor: "#fff",
     }}
   >
-    <FilterStack.Screen
-      name="Filter"
-      component={FilterScreen}
+    <DrawerStack2.Screen
+      name="Drawer2"
+      component={DrawerScreen2}
       options={{
-        title: "Filter",
+        title: "Drawer2",
         headerLeft: () => (
           <Icon.Button
             name="menu"
@@ -43,10 +43,10 @@ const FilterStackScreen = ({ navigation }) => (
         ),
       }}
     />
-  </FilterStack.Navigator>
+  </DrawerStack2.Navigator>
 );
 
-export default FilterStackScreen;
+export default DrawerStackScreen2;
 
 const styles = StyleSheet.create({
   container: {

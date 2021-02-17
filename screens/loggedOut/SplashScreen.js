@@ -32,7 +32,7 @@ const SplashScreen = ({ navigation }) => {
         animation="fadeInUpBig"
       >
         <Text style={[styles.title, { color: colors.text }]}>
-          Welcome to Showify
+          Welcome to Pedometer
         </Text>
         <Text style={styles.text}>Sign In</Text>
         <View style={styles.button}>

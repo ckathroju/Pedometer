@@ -7,6 +7,15 @@ import {
   setCurrentAppStepCount,
   setCurrentDayStepCount,
 } from "../store/actions/pedometer";
+import {
+  getCurrentDate,
+  getPreviousDate,
+  dateToEpoch,
+} from "../utils/datetime";
+import * as SQLite from "expo-sqlite";
+import { DB_FILE, DB_TABLE } from "../constants";
+
+const db = SQLite.openDatabase(DB_FILE);
 
 export default function App() {
   const [isPedometerAvailable, setIsPedometerAvailable] = useState("checking");
@@ -30,8 +39,7 @@ export default function App() {
     );
 
     // Get current day steps before app was open
-    const currentDayStart = new Date();
-    currentDayStart.setHours(0, 0, 0, 0);
+    const currentDayStart = getCurrentDate();
     const currentDayEnd = new Date();
     Pedometer.getStepCountAsync(currentDayStart, currentDayEnd).then(
       (result) => {
@@ -43,17 +51,21 @@ export default function App() {
     );
 
     // Get yesterdays steps
-    let yesterdayStart = new Date();
-    yesterdayStart.setHours(0, 0, 0, 0);
-    yesterdayStart = yesterdayStart.getDate() - 1;
-    const yesterdayEnd = new Date();
-    yesterdayEnd.setHours(0, 0, 0, 0);
+    let yesterdayStart = getPreviousDate(1);
+    const yesterdayEnd = getCurrentDate();
     Pedometer.getStepCountAsync(yesterdayStart, yesterdayEnd).then(
       (result) => {
         dispatch(setYesterdayStepCount(result.steps));
+        db.transaction((tx) => {
+          tx.executeSql(
+            `insert into ${DB_TABLE} (id, steps) values (${dateToEpoch(
+              yesterdayStart
+            )}, ${result.steps})`
+          );
+        });
       },
       (error) => {
-        // setPastStepCount("Could not get stepCount: " + error);
+        console.log(error);
       }
     );
   };

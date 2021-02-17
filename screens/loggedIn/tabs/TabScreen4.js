@@ -1,55 +1,51 @@
 import React from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from "@react-navigation/native";
 
-export const ApprovedScreen = ({ navigation }) => {
+export const TabScreen4 = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text>Approved</Text>
-      <Button
-        title="Details screen"
-        onPress={() => navigation.navigate("Details")}
-      />
+      <Text>Tab4</Text>
     </View>
   );
 };
 
-const ApprovedStack = createStackNavigator();
+const TabStack4 = createStackNavigator();
 
-const ApprovedStackScreen = ({ navigation }) => {
+const TabStackScreen4 = ({ navigation }) => {
   const { colors } = useTheme();
 
   return (
-    <ApprovedStack.Navigator
+    <TabStack4.Navigator
       screenOptions={{
         headerStyle: {
-          backgroundColor: colors.tabs.approved,
+          backgroundColor: colors.tabs.tab4,
         },
         headerTintColor: colors.components.headerTintColor,
       }}
     >
-      <ApprovedStack.Screen
-        name="Approved"
-        component={ApprovedScreen}
+      <TabStack4.Screen
+        name="Tab4"
+        component={TabScreen4}
         options={{
-          title: "Approved",
+          title: "Tab4",
           headerLeft: () => (
             <Icon.Button
               name="menu"
               size={25}
-              backgroundColor={colors.tabs.approved}
+              backgroundColor={colors.tabs.tab4}
               onPress={() => navigation.openDrawer()}
             ></Icon.Button>
           ),
         }}
       />
-    </ApprovedStack.Navigator>
+    </TabStack4.Navigator>
   );
 };
 
-export default ApprovedStackScreen;
+export default TabStackScreen4;
 
 const styles = StyleSheet.create({
   container: {

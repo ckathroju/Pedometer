@@ -19,10 +19,9 @@ const ThemeExtras = {
   },
   tabs: {
     pedometer: "#8bc34a",
-    approved: "#2196f3",
-    disapproved: "#3f51b5",
-    seen: "#673ab7",
-    watchlist: "#4caf50",
+    tab2: "#673ab7",
+    tab3: "#2196f3",
+    tab4: "#3f51b5",
   },
 };
 

@@ -15,10 +15,17 @@ import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import avatar from "../assets/avatar.png";
 import { AuthContext } from "../contexts/context";
+import { useSelector } from "react-redux";
 
 const DrawerContent = (props) => {
   const { signOut, toggleTheme } = useContext(AuthContext);
   const PaperTheme = useTheme();
+  const currentDayStepCount = useSelector(
+    (state) => state.pedometer.currentDayStepCount
+  );
+  const currentAppStepCount = useSelector(
+    (state) => state.pedometer.currentAppStepCount
+  );
 
   return (
     <View style={{ flex: 1 }}>
@@ -28,60 +35,36 @@ const DrawerContent = (props) => {
             <View style={{ flexDirection: "row", marginTop: 15 }}>
               <Avatar.Image source={avatar} size={50} />
               <View style={{ flexDirection: "column", marginLeft: 15 }}>
-                <Title style={styles.title}>Avatar Name</Title>
+                <Title style={styles.title}>Name</Title>
                 <Caption style={styles.caption}>Email/ID</Caption>
               </View>
             </View>
             <View style={styles.row}>
               <View style={styles.section}>
                 <Paragraph style={[styles.paragraph, styles.caption]}>
-                  80
+                  {currentDayStepCount + currentAppStepCount}
                 </Paragraph>
-                <Caption style={styles.caption}>Following</Caption>
-              </View>
-              <View>
-                <Paragraph style={[styles.paragraph, styles.caption]}>
-                  100
-                </Paragraph>
-                <Caption style={styles.caption}>Follower</Caption>
+                <Caption style={styles.caption}>steps tracked today</Caption>
               </View>
             </View>
           </View>
           <Drawer.Section style={styles.drawerSection}>
             <DrawerItem
               icon={({ color, size }) => (
-                <Icon name="filter-variant" color={color} size={size} />
+                <Icon name="information-outline" color={color} size={size} />
               )}
-              label="Filter"
+              label="Drawer1"
               onPress={() => {
-                props.navigation.navigate("Filter");
+                props.navigation.navigate("Drawer1");
               }}
             />
             <DrawerItem
               icon={({ color, size }) => (
                 <Icon name="account-outline" color={color} size={size} />
               )}
-              label="Profile"
+              label="Drawer2"
               onPress={() => {
-                props.navigation.navigate("Profile");
-              }}
-            />
-            <DrawerItem
-              icon={({ color, size }) => (
-                <Icon name="lifebuoy" color={color} size={size} />
-              )}
-              label="Support"
-              onPress={() => {
-                props.navigation.navigate("Support");
-              }}
-            />
-            <DrawerItem
-              icon={({ color, size }) => (
-                <Icon name="information-outline" color={color} size={size} />
-              )}
-              label="About"
-              onPress={() => {
-                props.navigation.navigate("About");
+                props.navigation.navigate("Drawer2");
               }}
             />
           </Drawer.Section>
@@ -136,13 +119,9 @@ const styles = StyleSheet.create({
   },
   row: {
     marginTop: 20,
-    flexDirection: "row",
-    alignItems: "center",
   },
   section: {
     flexDirection: "row",
-    alignItems: "center",
-    marginRight: 15,
   },
   paragraph: {
     fontWeight: "bold",

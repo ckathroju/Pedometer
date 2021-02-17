@@ -1,17 +1,14 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import PedometerStackScreen from "../screens/loggedIn/tabs/PedometerScreen";
-import WatchListStackScreen from "../screens/loggedIn/tabs/WatchListScreen";
-import ApprovedStackScreen from "../screens/loggedIn/tabs/ApprovedScreen";
-import DisapprovedStackScreen from "../screens/loggedIn/tabs/DisapprovedScreen";
-import SeenStackScreen from "../screens/loggedIn/tabs/SeenScreen";
+import TabStackScreen3 from "../screens/loggedIn/tabs/TabScreen3";
+import TabStackScreen4 from "../screens/loggedIn/tabs/TabScreen4";
+import TabStackScreen2 from "../screens/loggedIn/tabs/TabScreen2";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from "@react-navigation/native";
 import TabBarContent from "./TabBarContent";
-import FilterStackScreen from "../screens/loggedIn/drawer/FilterScreen";
-import ProfileStackScreen from "../screens/loggedIn/drawer/ProfileScreen";
-import SupportStackScreen from "../screens/loggedIn/drawer/SupportScreen";
-import AboutStackScreen from "../screens/loggedIn/drawer/AboutScreen";
+import DrawerStackScreen2 from "../screens/loggedIn/drawer/DrawerScreen2";
+import DrawerStackScreen1 from "../screens/loggedIn/drawer/DrawerScreen1";
 
 const Tab = createBottomTabNavigator();
 
@@ -35,53 +32,40 @@ const MainTabScreen = () => {
         }}
       />
       <Tab.Screen
-        name="Approved"
-        component={ApprovedStackScreen}
+        name="Tab2"
+        component={TabStackScreen2}
         options={{
-          tabBarLabel: "Approved",
-          tabBarColor: colors.tabs.approved,
+          tabBarLabel: "Tab2",
+          tabBarColor: colors.tabs.tab2,
           tabBarIcon: ({ color }) => (
             <Icon name="thumb-up-outline" color={color} size={26} />
           ),
         }}
       />
       <Tab.Screen
-        name="Disapproved"
-        component={DisapprovedStackScreen}
+        name="Tab3"
+        component={TabStackScreen3}
         options={{
-          tabBarLabel: "Disapproved",
-          tabBarColor: colors.tabs.disapproved,
+          tabBarLabel: "Tab4",
+          tabBarColor: colors.tabs.tab3,
+          tabBarIcon: ({ color }) => (
+            <Icon name="thumb-up-outline" color={color} size={26} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Tab4"
+        component={TabStackScreen4}
+        options={{
+          tabBarLabel: "Tab4",
+          tabBarColor: colors.tabs.tab4,
           tabBarIcon: ({ color }) => (
             <Icon name="thumb-down-outline" color={color} size={26} />
           ),
         }}
       />
-      <Tab.Screen
-        name="Seen"
-        component={SeenStackScreen}
-        options={{
-          tabBarLabel: "Seen",
-          tabBarColor: colors.tabs.seen,
-          tabBarIcon: ({ color }) => (
-            <Icon name="television-off" color={color} size={26} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="WatchList"
-        component={WatchListStackScreen}
-        options={{
-          tabBarLabel: "Watch List",
-          tabBarColor: colors.tabs.watchlist,
-          tabBarIcon: ({ color }) => (
-            <Icon name="television-guide" color={color} size={26} />
-          ),
-        }}
-      />
-      <Tab.Screen name="Filter" component={FilterStackScreen} />
-      <Tab.Screen name="Profile" component={ProfileStackScreen} />
-      <Tab.Screen name="Support" component={SupportStackScreen} />
-      <Tab.Screen name="About" component={AboutStackScreen} />
+      <Tab.Screen name="Drawer1" component={DrawerStackScreen1} />
+      <Tab.Screen name="Drawer2" component={DrawerStackScreen2} />
     </Tab.Navigator>
   );
 };

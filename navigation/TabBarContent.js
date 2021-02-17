@@ -3,19 +3,12 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { useTheme } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-const visibleTabs = [
-  "Pedometer",
-  "Approved",
-  "Disapproved",
-  "Seen",
-  "WatchList",
-];
+const visibleTabs = ["Pedometer", "Tab2", "Tab3", "Tab4"];
 const iconMap = {
   Pedometer: "cards-outline",
-  Approved: "thumb-up-outline",
-  Disapproved: "thumb-down-outline",
-  Seen: "television-off",
-  WatchList: "television-guide",
+  Tab2: "thumb-up-outline",
+  Tab3: "thumb-down-outline",
+  Tab4: "thumb-up-outline",
 };
 
 const TabBarContent = ({ state, descriptors, navigation }) => {

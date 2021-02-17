@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from "@react-navigation/native";
 
-export const AboutScreen = ({ navigation }) => {
+export const DrawerScreen1 = ({ navigation }) => {
   const { colors } = useTheme();
 
   const theme = useTheme();
@@ -12,15 +12,15 @@ export const AboutScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle={theme.dark ? "dark-content" : "light-content"} />
-      <Text style={{ color: colors.text }}>About Screen</Text>
+      <Text style={{ color: colors.text }}>Drawer1</Text>
     </View>
   );
 };
 
-const AboutStack = createStackNavigator();
+const DrawerStack1 = createStackNavigator();
 
-const AboutStackScreen = ({ navigation }) => (
-  <AboutStack.Navigator
+const DrawerStackScreen1 = ({ navigation }) => (
+  <DrawerStack1.Navigator
     screenOptions={{
       headerStyle: {
         backgroundColor: "#8bc34a",
@@ -28,11 +28,11 @@ const AboutStackScreen = ({ navigation }) => (
       headerTintColor: "#fff",
     }}
   >
-    <AboutStack.Screen
-      name="About"
-      component={AboutScreen}
+    <DrawerStack1.Screen
+      name="Drawer1"
+      component={DrawerScreen1}
       options={{
-        title: "About",
+        title: "Drawer1",
         headerLeft: () => (
           <Icon.Button
             name="menu"
@@ -43,10 +43,10 @@ const AboutStackScreen = ({ navigation }) => (
         ),
       }}
     />
-  </AboutStack.Navigator>
+  </DrawerStack1.Navigator>
 );
 
-export default AboutStackScreen;
+export default DrawerStackScreen1;
 
 const styles = StyleSheet.create({
   container: {

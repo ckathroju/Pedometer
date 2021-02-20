@@ -65,7 +65,7 @@ export default function App() {
         });
       },
       (error) => {
-        console.log(error);
+        // console.log(error);
       }
     );
   };

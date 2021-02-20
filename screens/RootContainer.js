@@ -96,7 +96,7 @@ const RootContainer = () => {
         try {
           await AsyncStorage.removeItem("userToken");
         } catch (e) {
-          console.log(e);
+          // console.log(e);
         }
         dispatch({ type: "LOGOUT" });
       },
@@ -144,7 +144,7 @@ const RootContainer = () => {
       try {
         userToken = await AsyncStorage.getItem("userToken");
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
       dispatch({ type: "RETRIEVE_TOKEN", token: userToken });
     }, 1000);

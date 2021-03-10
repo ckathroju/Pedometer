@@ -4,7 +4,12 @@ import { PersistGate } from "redux-persist/es/integration/react";
 import configureStore from "./store/configureStore";
 import RootContainer from "./screens/RootContainer";
 import * as SQLite from "expo-sqlite";
-import { DB_FILE, DB_PEDOMETER_TABLE, DB_WEIGHT_TABLE } from "./constants";
+import {
+  DB_FILE,
+  DB_PEDOMETER_TABLE,
+  DB_WEIGHT_TABLE,
+  DB_HEIGHT_TABLE,
+} from "./constants";
 
 const db = SQLite.openDatabase(DB_FILE);
 
@@ -20,6 +25,11 @@ const App = () => {
     db.transaction((tx) => {
       tx.executeSql(
         `create table if not exists ${DB_WEIGHT_TABLE} (id integer primary key not null, weight text);`
+      );
+    });
+    db.transaction((tx) => {
+      tx.executeSql(
+        `create table if not exists ${DB_HEIGHT_TABLE} (id integer primary key not null, height text);`
       );
     });
   }, []);

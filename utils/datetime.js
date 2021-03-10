@@ -20,3 +20,7 @@ export const getPreviousDate = (days) => {
   date.setDate(date.getDate() - days);
   return date;
 };
+
+export const getCurrentDateInEpoch = () => {
+  return dateToEpoch(getCurrentDate());
+};

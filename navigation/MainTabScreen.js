@@ -35,10 +35,10 @@ const MainTabScreen = () => {
         name="Tab2"
         component={TabStackScreen2}
         options={{
-          tabBarLabel: "Tab2",
+          tabBarLabel: "Weight",
           tabBarColor: colors.tabs.tab2,
           tabBarIcon: ({ color }) => (
-            <Icon name="thumb-up-outline" color={color} size={26} />
+            <Icon name="weight-pound" color={color} size={26} />
           ),
         }}
       />

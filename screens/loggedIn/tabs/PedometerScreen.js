@@ -7,6 +7,9 @@ import PedometerView from "../../../components/PedometerView";
 import DonutChart from "../../../components/DonutChart";
 import { useSelector } from "react-redux";
 
+import LineChart from "../../../components/LineChart";
+
+
 export const PedometerScreen = ({ navigation }) => {
   const currentAppStepCount = useSelector(
     (state) => state.pedometer.currentAppStepCount
@@ -26,6 +29,7 @@ export const PedometerScreen = ({ navigation }) => {
         goal={goal}
       />
       <PedometerView />
+      <LineChart />
     </View>
   );
 };

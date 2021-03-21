@@ -8,7 +8,8 @@ import {
   VictoryTheme,
 } from "victory-native";
 
-function LineChart() {
+function LineChart(props) {
+  const {data} = props
 
   return (
     <View>

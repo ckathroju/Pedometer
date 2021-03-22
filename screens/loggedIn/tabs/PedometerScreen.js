@@ -10,7 +10,7 @@ import * as SQLite from "expo-sqlite";
 
 import LineChart from "../../../components/LineChart";
 import { DB_FILE, DB_PEDOMETER_TABLE } from "../../../constants";
-import { epochToDate } from "../../../utils/datetime";
+import { epochToDate, dateToEpoch, getPreviousDate } from "../../../utils/datetime";
 
 const db = SQLite.openDatabase(DB_FILE);
 
@@ -28,6 +28,23 @@ export const PedometerScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
+    for (let i = 0; i < 10; i++) {
+      const id = dateToEpoch(getPreviousDate(i));
+      const steps = Math.floor(Math.random()*10000);
+      // const steps = i * 100;
+      db.transaction((tx) => {
+        tx.executeSql(
+          `INSERT INTO ${DB_PEDOMETER_TABLE} (id, steps) VALUES (${id}, ${steps})`,
+          [],
+          (_, { rows }) => {
+            console.log('success' + steps);
+          }
+        );
+      });
+    }
+  });
+
+  useEffect(() => {
     db.transaction((tx) => {
       tx.executeSql(
         `select * from ${DB_PEDOMETER_TABLE}`, 
@@ -43,6 +60,8 @@ export const PedometerScreen = ({ navigation }) => {
       );
     });
   }, []);
+
+
 
   return (
     <View style={styles.container}>

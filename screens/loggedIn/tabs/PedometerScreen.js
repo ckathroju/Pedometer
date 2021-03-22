@@ -51,6 +51,13 @@ export const PedometerScreen = ({ navigation }) => {
         goal={goal}
       />
       <PedometerView />
+      {/* <LineChart data={[
+            { x: 1, y: 5 },
+            { x: 2, y: 3 },
+            { x: 3, y: 5 },
+            { x: 4, y: 4 },
+            { x: 5, y: 7 },
+          ]} /> */}
       <LineChart data={data} />
     </View>
   );

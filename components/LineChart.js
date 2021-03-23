@@ -27,7 +27,7 @@ function LineChart(props) {
             fontSize: 60,
           }}
           data = {data}
-          labels = {({ data }) => `${data.y}`}
+          labels = {({ datum }) => `${datum.y}`}
         />
       </VictoryChart>
       {/* <Text

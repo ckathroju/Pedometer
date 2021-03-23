@@ -56,7 +56,7 @@ export const PedometerScreen = ({ navigation }) => {
         (_, { rows }) => {
           setData(
             rows["_array"].map((x) => ({
-              y: x.steps,
+              y: Number(x.steps),
               x: epochToDate(x["id"]),
               // labels: x.steps,
             }))

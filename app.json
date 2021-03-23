@@ -2,6 +2,9 @@
   "name": "frontend",
   "displayName": "frontend",
   "expo": {
+    "android":{
+      "useNextNotificationsApi": true
+    },
     "name": "frontend",
     "slug": "frontend",
     "version": "1.0.0",

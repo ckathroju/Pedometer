@@ -1,3 +1,4 @@
+import { DefaultTheme } from "@react-navigation/native";
 import React from "react";
 import { View } from "react-native";
 // import ReactDOM from 'react-dom';
@@ -19,10 +20,17 @@ function LineChart(props) {
           style={{
             data: { stroke: "#c43a31" },
             parent: { border: "1px solid #ccc" },
+            position: "absolute",
+            // top: 125,
+            left: "25%",
+            color: "#FFE600",
+            fontSize: 60,
           }}
+          data = {data}
+          labels = {({ data }) => `${data.y}`}
         />
       </VictoryChart>
-      <Text
+      {/* <Text
         style={{
           position: "absolute",
           top: 125,
@@ -32,7 +40,7 @@ function LineChart(props) {
         }}
       >
         {` ${value} `}
-      </Text>
+      </Text> */}
     </View>
   );
 }

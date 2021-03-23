@@ -20,6 +20,7 @@ export const PedometerScreen = ({ navigation }) => {
   );
   const currentDayStepCount = useSelector(
     (state) => state.pedometer.currentDayStepCount
+    // (state) => state.pedometer.currentDayStepCount
   );
   const setYesterdayStepCount = useSelector(
     (state) => state.pedometer.yesterdayStepCount
@@ -34,10 +35,12 @@ export const PedometerScreen = ({ navigation }) => {
       // const steps = i * 100;
       db.transaction((tx) => {
         tx.executeSql(
-          `INSERT INTO ${DB_PEDOMETER_TABLE} (id, steps) VALUES (${id}, ${steps})`,
+          // `UPDATE ${DB_PEDOMETER_TABLE} SET steps = ${steps} WHERE id = ${id};`,
+          `INSERT INTO ${DB_PEDOMETER_TABLE} (id, steps) VALUES (${id}, ${steps}); UPDATE ${DB_PEDOMETER_TABLE} SET steps = ${steps} WHERE id = ${id};`,
+          // `INSERT INTO ${DB_PEDOMETER_TABLE} (id, steps) VALUES (${id}, ${steps})`,
           [],
           (_, { rows }) => {
-            console.log('success' + steps);
+            console.log('success ' + steps);
           }
         );
       });
@@ -45,15 +48,17 @@ export const PedometerScreen = ({ navigation }) => {
   });
 
   useEffect(() => {
-    db.transaction((tx) => {
+      const id = dateToEpoch(getPreviousDate(6));
+      db.transaction((tx) => {
       tx.executeSql(
-        `select * from ${DB_PEDOMETER_TABLE}`, 
+        `select * from ${DB_PEDOMETER_TABLE} WHERE id >= ${id}`, 
         [], 
         (_, { rows }) => {
           setData(
             rows["_array"].map((x) => ({
               y: x.steps,
               x: epochToDate(x["id"]),
+              // labels: x.steps,
             }))
           );
         }

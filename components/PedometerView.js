@@ -80,11 +80,7 @@ export default function App() {
     return () => _unsubscribe();
   }, []);
 
-  return (
-    <View style={styles.container}>
-      <Text>Pedometer.isAvailableAsync(): {isPedometerAvailable}</Text>
-    </View>
-  );
+  return null;
 }
 
 const styles = StyleSheet.create({

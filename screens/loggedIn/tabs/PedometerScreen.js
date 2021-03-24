@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, StatusBar } from "react-native";
+import { StyleSheet, ScrollView, View, StatusBar } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from "@react-navigation/native";
@@ -10,11 +10,16 @@ import * as SQLite from "expo-sqlite";
 
 import LineChart from "../../../components/LineChart";
 import { DB_FILE, DB_PEDOMETER_TABLE } from "../../../constants";
-import { epochToDate, dateToEpoch, getPreviousDate } from "../../../utils/datetime";
+import {
+  epochToDate,
+  dateToEpoch,
+  getPreviousDate,
+} from "../../../utils/datetime";
 
 const db = SQLite.openDatabase(DB_FILE);
 
 export const PedometerScreen = ({ navigation }) => {
+  const theme = useTheme();
   const currentAppStepCount = useSelector(
     (state) => state.pedometer.currentAppStepCount
   );
@@ -31,7 +36,7 @@ export const PedometerScreen = ({ navigation }) => {
   useEffect(() => {
     for (let i = 0; i < 10; i++) {
       const id = dateToEpoch(getPreviousDate(i));
-      const steps = Math.floor(Math.random()*10000);
+      const steps = Math.floor(Math.random() * 10000);
       // const steps = i * 100;
       db.transaction((tx) => {
         tx.executeSql(
@@ -40,7 +45,7 @@ export const PedometerScreen = ({ navigation }) => {
           // `INSERT INTO ${DB_PEDOMETER_TABLE} (id, steps) VALUES (${id}, ${steps})`,
           [],
           (_, { rows }) => {
-            console.log('success ' + steps);
+            console.log("success " + steps);
           }
         );
       });
@@ -48,11 +53,11 @@ export const PedometerScreen = ({ navigation }) => {
   });
 
   useEffect(() => {
-      const id = dateToEpoch(getPreviousDate(6));
-      db.transaction((tx) => {
+    const id = dateToEpoch(getPreviousDate(6));
+    db.transaction((tx) => {
       tx.executeSql(
-        `select * from ${DB_PEDOMETER_TABLE} WHERE id >= ${id}`, 
-        [], 
+        `select * from ${DB_PEDOMETER_TABLE} WHERE id >= ${id}`,
+        [],
         (_, { rows }) => {
           setData(
             rows["_array"].map((x) => ({
@@ -66,24 +71,25 @@ export const PedometerScreen = ({ navigation }) => {
     });
   }, []);
 
-
-
   return (
-    <View style={styles.container}>
-      <DonutChart
-        value={currentAppStepCount + currentDayStepCount}
-        goal={goal}
-      />
-      <PedometerView />
-      {/* <LineChart data={[
+    <ScrollView>
+      <View style={styles.container}>
+        <StatusBar barStyle={theme.dark ? "dark-content" : "light-content"} />
+        <DonutChart
+          value={currentAppStepCount + currentDayStepCount}
+          goal={goal}
+        />
+        <PedometerView />
+        {/* <LineChart data={[
             { x: 1, y: 5 },
             { x: 2, y: 3 },
             { x: 3, y: 5 },
             { x: 4, y: 4 },
             { x: 5, y: 7 },
           ]} /> */}
-      <LineChart data={data} />
-    </View>
+        <LineChart data={data} />
+      </View>
+    </ScrollView>
   );
 };
 

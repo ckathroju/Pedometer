@@ -11,6 +11,8 @@ import {
   DB_HEIGHT_TABLE,
 } from "./constants";
 
+// import LineChart from "./components/LineChart";
+
 const db = SQLite.openDatabase(DB_FILE);
 
 const App = () => {
@@ -42,5 +44,15 @@ const App = () => {
     </Provider>
   );
 };
+
+// function App() {
+//   return (
+//     <div className="App">
+//       <div className='chart'>
+//         <LineChart />
+//       </div>
+//     </div>
+//   )
+// }
 
 export default App;

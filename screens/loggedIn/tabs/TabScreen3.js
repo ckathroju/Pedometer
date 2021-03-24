@@ -4,14 +4,14 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from "@react-navigation/native";
 import * as SQLite from "expo-sqlite";
-import { DB_FILE, DB_TABLE } from "../../../constants";
+import { DB_FILE, DB_PEDOMETER_TABLE } from "../../../constants";
 
 const db = SQLite.openDatabase(DB_FILE);
 
 export const TabScreen3 = ({ navigation }) => {
   useEffect(() => {
     db.transaction((tx) => {
-      tx.executeSql(`select * from ${DB_TABLE}`, [], (_, { rows }) =>
+      tx.executeSql(`select * from ${DB_PEDOMETER_TABLE}`, [], (_, { rows }) =>
         console.log(JSON.stringify(rows))
       );
     });

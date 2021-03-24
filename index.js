@@ -1,6 +1,6 @@
 import { registerRootComponent } from "expo";
 import "react-native-gesture-handler";
-
+import PushNotification from "react-native-push-notification";
 import App from "./App";
 
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);

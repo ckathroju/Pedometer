@@ -4,6 +4,8 @@ import { PersistGate } from "redux-persist/es/integration/react";
 import configureStore from "./store/configureStore";
 import RootContainer from "./screens/RootContainer";
 import * as SQLite from "expo-sqlite";
+import Toast from 'react-native-simple-toast';
+
 import {
   DB_FILE,
   DB_PEDOMETER_TABLE,
@@ -17,6 +19,9 @@ const App = () => {
   const { store, persistor } = configureStore();
 
   useEffect(() => {
+
+    Toast.showWithGravity('Enter your daily weight', Toast.LONG, Toast.TOP);
+
     db.transaction((tx) => {
       tx.executeSql(
         `create table if not exists ${DB_PEDOMETER_TABLE} (id integer primary key not null, steps text);`

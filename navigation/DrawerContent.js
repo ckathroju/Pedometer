@@ -51,7 +51,7 @@ const DrawerContent = (props) => {
           <Drawer.Section style={styles.drawerSection}>
             <DrawerItem
               icon={({ color, size }) => (
-                <Icon name="information-outline" color={color} size={size} />
+                <Icon name="account-outline" color={color} size={size} />
               )}
               label="Health Info"
               onPress={() => {
@@ -60,9 +60,9 @@ const DrawerContent = (props) => {
             />
             <DrawerItem
               icon={({ color, size }) => (
-                <Icon name="account-outline" color={color} size={size} />
+                <Icon name="information-outline" color={color} size={size} />
               )}
-              label="Drawer2"
+              label="Notifications"
               onPress={() => {
                 props.navigation.navigate("Drawer2");
               }}

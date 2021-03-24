@@ -3,11 +3,16 @@ import { StyleSheet, Text, View, StatusBar } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from "@react-navigation/native";
-import { getCurrentDateInEpoch, epochToDate } from "../../../utils/datetime";
+import { getCurrentDateInEpoch, epochToDate, getPreviousDate, dateToEpoch } from "../../../utils/datetime";
 import * as SQLite from "expo-sqlite";
 import { TextInput, Button, DataTable } from "react-native-paper";
 //imported this from constants
 import { DB_FILE, DB_WEIGHT_TABLE } from "../../../constants";
+
+//changes here.
+import LineChart from "../../../components/LineChart";
+import { useSelector } from "react-redux";
+
 
 const db = SQLite.openDatabase(DB_FILE);
 
@@ -16,14 +21,16 @@ export const TabScreen2 = ({ navigation }) => {
   const theme = useTheme();
   const [data, setData] = useState(null);
   const [tableData, setTableData] = useState([]);
+  const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
     getData();
   }, []);
 
   const getData = () => {
+    const id = getCurrentDateInEpoch();
     db.transaction((tx) => {
-      tx.executeSql(`SELECT * FROM ${DB_WEIGHT_TABLE}`, [], (_, { rows }) => {
+      tx.executeSql(`SELECT * FROM ${DB_WEIGHT_TABLE} WHERE id == ${id}`, [], (_, { rows }) => {
         console.log(JSON.stringify(rows["_array"]));
         setTableData(rows["_array"]);
       });
@@ -35,17 +42,53 @@ export const TabScreen2 = ({ navigation }) => {
     db.transaction((tx) => {
       tx.executeSql(
         `INSERT INTO ${DB_WEIGHT_TABLE} (id, weight) VALUES (${id}, ${data})`,
+        // `INSERT INTO ${DB_WEIGHT_TABLE} (id, weight) VALUES (${id}, ${chartData}); UPDATE ${DB_WEIGHT_TABLE} SET weight = ${chartData} WHERE id = ${id};`,
         [],
         (_, { rows }) => console.log("success insert")
       );
     });
   };
 
+  useEffect(() => {
+    for (let i = 0; i < 10; i++) {
+      const id = dateToEpoch(getPreviousDate(i));
+      const weight = Math.floor(Math.random()*100) + 100;
+      // const steps = i * 100;
+      db.transaction((tx) => {
+        tx.executeSql(
+          `INSERT INTO ${DB_WEIGHT_TABLE} (id, weight) VALUES (${id}, ${weight})`,
+          [],
+          (_, { rows }) => {
+            console.log('success ' + weight);
+          }
+        );
+      });
+    }
+  });
+
+  useEffect(() => {
+      const id = dateToEpoch(getPreviousDate(6));
+      db.transaction((tx) => {
+      tx.executeSql(
+        `select * from ${DB_WEIGHT_TABLE} WHERE id >= ${id}`, 
+        [], 
+        (_, { rows }) => {
+          setChartData(
+            rows["_array"].map((x) => ({
+              y: Number(x.weight),
+              x: epochToDate(x["id"]),
+            }))
+          );
+        }
+      );
+    });
+  }, []);
+
   return (
     <View>
       <View>
         <StatusBar barStyle={theme.dark ? "dark-content" : "light-content"} />
-        <Text style={{ color: colors.text }}>Enter your weight today.</Text>
+        <Text style={{ color: colors.text }}>Enter your weight today:</Text>
         <TextInput
           label="Weight"
           value={data}
@@ -76,9 +119,11 @@ export const TabScreen2 = ({ navigation }) => {
           </DataTable>
         </View>
       </View>
+      <LineChart data={chartData} />
     </View>
   );
 };
+
 
 const TabStack2 = createStackNavigator();
 
@@ -112,6 +157,8 @@ const TabStackScreen2 = ({ navigation }) => {
     </TabStack2.Navigator>
   );
 };
+
+
 
 const styles = StyleSheet.create({
   container: {

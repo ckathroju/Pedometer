@@ -6,6 +6,7 @@ import { useTheme } from "@react-navigation/native";
 import * as SQLite from "expo-sqlite";
 import { DB_FILE, DB_PEDOMETER_TABLE } from "../../../constants";
 
+
 const db = SQLite.openDatabase(DB_FILE);
 
 export const TabScreen3 = ({ navigation }) => {
@@ -23,7 +24,7 @@ export const TabScreen3 = ({ navigation }) => {
     </View>
   );
 };
-
+// testing 123
 const TabStack3 = createStackNavigator();
 
 const TabStackScreen3 = ({ navigation }) => {

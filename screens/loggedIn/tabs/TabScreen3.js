@@ -1,26 +1,52 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from "@react-navigation/native";
 import * as SQLite from "expo-sqlite";
-import { DB_FILE, DB_PEDOMETER_TABLE } from "../../../constants";
+import { DB_FILE, DB_WEIGHT_TABLE, DB_HEIGHT_TABLE } from "../../../constants";
+import LineChart from "../../../components/LineChart"
+import { Line } from "react-chartjs-2";
 
+import { epochToDate, dateToEpoch, getPreviousDate } from "../../../utils/datetime";
 
 const db = SQLite.openDatabase(DB_FILE);
 
 export const TabScreen3 = ({ navigation }) => {
+  // useEffect(() => {
+  //   db.transaction((tx) => {
+  //     tx.executeSql(`select * from ${DB_PEDOMETER_TABLE}`, [], (_, { rows }) =>
+  //       console.log(JSON.stringify(rows))
+  //     );
+  //   });
+  // }, []);
+
+  const [data, setData] = useState([]);
+
   useEffect(() => {
-    db.transaction((tx) => {
-      tx.executeSql(`select * from ${DB_PEDOMETER_TABLE}`, [], (_, { rows }) =>
-        console.log(JSON.stringify(rows))
+      const id = dateToEpoch(getPreviousDate(6));
+      db.transaction((tx) => {
+      tx.executeSql(
+        `select * from ${DB_WEIGHT_TABLE} WHERE id >= ${id}`, 
+        [], 
+        (_, { rows }) => {
+          setData(
+            rows["_array"].map((x) => ({
+              // bmi formula is kg/m^2 
+              y: (Math.floor((Number(x.weight * 0.453592)/ (1.75*1.75)*100)))/ 100,
+              x: epochToDate(x["id"]),
+              // labels: x.steps,
+            }))
+          );
+        }
       );
     });
   }, []);
 
   return (
     <View style={styles.container}>
-      <Text>Tab3</Text>
+      <Text>Heres your BMI over the past week</Text>
+      <LineChart data={data}/>
     </View>
   );
 };
@@ -40,10 +66,10 @@ const TabStackScreen3 = ({ navigation }) => {
       }}
     >
       <TabStack3.Screen
-        name="Tab3"
+        name="BMI"
         component={TabScreen3}
         options={{
-          title: "Tab3",
+          title: "BMI",
           headerLeft: () => (
             <Icon.Button
               name="menu"

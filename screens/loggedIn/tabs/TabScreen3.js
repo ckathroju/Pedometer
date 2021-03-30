@@ -45,7 +45,7 @@ export const TabScreen3 = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text>Heres your BMI over the past week</Text>
+      <Text>Body Mass Index for Past Week</Text>
       <LineChart data={data}/>
     </View>
   );

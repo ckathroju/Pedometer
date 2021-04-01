@@ -9,7 +9,7 @@ import LineChart from "../../../components/LineChart"
 import { Line } from "react-chartjs-2";
 
 import { epochToDate, dateToEpoch, getPreviousDate } from "../../../utils/datetime";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 
 const db = SQLite.openDatabase(DB_FILE);
 
@@ -86,11 +86,11 @@ export const TabScreen3 = ({ navigation }) => {
       <View style={styles.container}>
 
         <View style={styles.buttons}>
-          <Button title="BMI" onPress={() => setVisibleView('BMI')} />
+          <Button title="BMI" onPress={() => setVisibleView('BMI')}/>
           <Button title="Weight" onPress={() => setVisibleView('WEIGHT')} />
           <Button title="Steps" onPress={() => setVisibleView('STEPS')} />
         </View>
-
+        
         {visibleView === 'BMI' &&
           <>
             <Text>BMI over the past week</Text>
@@ -111,6 +111,7 @@ export const TabScreen3 = ({ navigation }) => {
         }
       </View>
     </ScrollView>
+    
   );
 };
 

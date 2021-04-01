@@ -8,7 +8,7 @@ import DonutChart from "../../../components/DonutChart";
 import { useSelector } from "react-redux";
 import * as SQLite from "expo-sqlite";
 
-import LineChart from "../../../components/LineChart";
+/*import LineChart from "../../../components/LineChart";
 import { DB_FILE, DB_PEDOMETER_TABLE } from "../../../constants";
 import {
   epochToDate,
@@ -17,7 +17,7 @@ import {
 } from "../../../utils/datetime";
 
 const db = SQLite.openDatabase(DB_FILE);
-
+*/
 export const PedometerScreen = ({ navigation }) => {
   const theme = useTheme();
   const currentAppStepCount = useSelector(
@@ -33,6 +33,7 @@ export const PedometerScreen = ({ navigation }) => {
   const goal = useSelector((state) => state.pedometer.goal);
   const [data, setData] = useState([]);
 
+  /*
   useEffect(() => {
     for (let i = 0; i < 10; i++) {
       const id = dateToEpoch(getPreviousDate(i));
@@ -70,6 +71,7 @@ export const PedometerScreen = ({ navigation }) => {
       );
     });
   }, []);
+*/
 
   return (
     <ScrollView>
@@ -80,14 +82,7 @@ export const PedometerScreen = ({ navigation }) => {
           goal={goal}
         />
         <PedometerView />
-        {/* <LineChart data={[
-            { x: 1, y: 5 },
-            { x: 2, y: 3 },
-            { x: 3, y: 5 },
-            { x: 4, y: 4 },
-            { x: 5, y: 7 },
-          ]} /> */}
-        <LineChart data={data} />
+        {/* <LineChart data={data} /> */}
       </View>
     </ScrollView>
   );

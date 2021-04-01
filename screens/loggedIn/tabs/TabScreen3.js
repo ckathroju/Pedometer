@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, Text, View, StatusBar } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from "@react-navigation/native";
@@ -7,18 +7,36 @@ import * as SQLite from "expo-sqlite";
 import { DB_FILE, DB_WEIGHT_TABLE, DB_HEIGHT_TABLE, DB_PEDOMETER_TABLE } from "../../../constants";
 import LineChart from "../../../components/LineChart"
 import { Line } from "react-chartjs-2";
+import { TextInput, DataTable } from "react-native-paper";
 
-import { epochToDate, dateToEpoch, getPreviousDate } from "../../../utils/datetime";
+import { epochToDate, dateToEpoch, getPreviousDate, getCurrentDateInEpoch, getCurrentDate } from "../../../utils/datetime";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 
 const db = SQLite.openDatabase(DB_FILE);
 
 export const TabScreen3 = ({ navigation }) => {
+  const { colors } = useTheme();
+  const theme = useTheme();
 
   const [data, setData] = useState([]);
   const [weight, setWeight] = useState([]);
   const [steps, setSteps] = useState([]);
   const [visibleView, setVisibleView] = useState('BMI') // 'BMI', 'WEIGHT', 'STEPS'
+
+  const [tableData, setTableData] = useState([]);
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = () => {
+    const id = getCurrentDateInEpoch();
+    db.transaction((tx) => {
+      tx.executeSql(`SELECT * FROM ${DB_WEIGHT_TABLE}`, [], (_, { rows }) => {
+        setTableData(rows["_array"]);
+      });
+    });
+  };
 
   useEffect(() => {
     const id = dateToEpoch(getPreviousDate(6));
@@ -83,8 +101,10 @@ export const TabScreen3 = ({ navigation }) => {
 
   return (
     <ScrollView>
+      <View>
+        <StatusBar barStyle={theme.dark ? "dark-content" : "light-content"} />
+      </View>
       <View style={styles.container}>
-
         <View style={styles.buttons}>
           <Button title="BMI" onPress={() => setVisibleView('BMI')}/>
           <Button title="Weight" onPress={() => setVisibleView('WEIGHT')} />
@@ -93,22 +113,49 @@ export const TabScreen3 = ({ navigation }) => {
         
         {visibleView === 'BMI' &&
           <>
-            <Text>BMI over the past week</Text>
+            <Text>Displaying BMI over the past week</Text>
             <LineChart data={data} />
           </>
         }
         {visibleView === 'WEIGHT' &&
           <>
-            <Text>Weight over the past week</Text>
+            <Text>Displaying weight over the past week</Text>
             <LineChart data={weight} />
+            
           </>
         }
         {visibleView === 'STEPS' &&
           <>
-            <Text>Steps over the past week</Text>
+            <Text>Displaying steps over the past week</Text>
             <LineChart data={steps} />
           </>
         }
+      </View>
+      <View>
+        <View>
+          <View>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title>Date</DataTable.Title>
+                <DataTable.Title>Weight</DataTable.Title>
+                <DataTable.Title>BMI</DataTable.Title>
+                <DataTable.Title>Steps</DataTable.Title>
+              </DataTable.Header>
+              {tableData.map((x) => {
+                return (
+                  <DataTable.Row key={x.id}>
+                    <DataTable.Cell>
+                      {epochToDate(x.id).toDateString()}
+                    </DataTable.Cell>
+                    <DataTable.Cell>{x.weight}</DataTable.Cell>
+                    <DataTable.Cell>{x.bmi}</DataTable.Cell>
+                    <DataTable.Cell>{x.steps}</DataTable.Cell>
+                  </DataTable.Row>
+                );
+              })}
+            </DataTable>
+          </View>
+        </View>
       </View>
     </ScrollView>
     
@@ -130,10 +177,10 @@ const TabStackScreen3 = ({ navigation }) => {
       }}
     >
       <TabStack3.Screen
-        name="BMI"
+        name="Trends"
         component={TabScreen3}
         options={{
-          title: "BMI",
+          title: "Trends",
           headerLeft: () => (
             <Icon.Button
               name="menu"

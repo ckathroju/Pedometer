@@ -46,7 +46,7 @@ const MainTabScreen = () => {
         name="Tab3"
         component={TabStackScreen3}
         options={{
-          tabBarLabel: "Tab3",
+          tabBarLabel: "Trends",
           tabBarColor: colors.tabs.tab3,
           tabBarIcon: ({ color }) => (
             <Icon name="thumb-up-outline" color={color} size={26} />

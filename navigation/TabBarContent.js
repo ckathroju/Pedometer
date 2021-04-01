@@ -7,8 +7,8 @@ const visibleTabs = ["Pedometer", "Tab2", "Tab3", "Tab4"];
 const iconMap = {
   Pedometer: "cards-outline",
   Tab2: "weight-pound",
-  Tab3: "thumb-down-outline",
-  Tab4: "thumb-up-outline",
+  Tab3: "chart-line-variant",
+  Tab4: "chart-bubble",
 };
 
 const TabBarContent = ({ state, descriptors, navigation }) => {

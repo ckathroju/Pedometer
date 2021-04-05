@@ -7,7 +7,7 @@ const visibleTabs = ["Pedometer", "Tab2", "Tab3", "Tab4"];
 const iconMap = {
   Pedometer: "cards-outline",
   Tab2: "weight-pound",
-  Tab3: "thumb-down-outline",
+  Tab3: "adjust",
   Tab4: "thumb-up-outline",
 };
 

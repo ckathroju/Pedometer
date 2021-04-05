@@ -5,10 +5,10 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const visibleTabs = ["Pedometer", "Tab2", "Tab3", "Tab4"];
 const iconMap = {
-  Pedometer: "cards-outline",
+  Pedometer: "shoe-print",
   Tab2: "weight-pound",
-  Tab3: "adjust",
-  Tab4: "thumb-up-outline",
+  Tab3: "chart-timeline-variant",
+  Tab4: "chart-bubble",
 };
 
 const TabBarContent = ({ state, descriptors, navigation }) => {

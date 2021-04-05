@@ -49,7 +49,7 @@ export const TabScreen2 = ({ navigation }) => {
         [],
         (_, { rows }) => console.log("success insert")
       );
-    });
+    }); 
   };
 
   useEffect(() => {

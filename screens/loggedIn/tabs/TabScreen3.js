@@ -25,6 +25,12 @@ export const TabScreen3 = ({ navigation }) => {
 
   const [tableData, setTableData] = useState([]);
 
+  // const [tableData, setTableData] = useState({
+  //   weight: [],
+  //   steps: [],
+  //   bmi: []
+  // });
+
   useEffect(() => {
     getData();
   }, []);
@@ -32,7 +38,7 @@ export const TabScreen3 = ({ navigation }) => {
   const getData = () => {
     const id = getCurrentDateInEpoch();
     db.transaction((tx) => {
-      tx.executeSql(`SELECT * FROM ${DB_WEIGHT_TABLE}`, [], (_, { rows }) => {
+      tx.executeSql(`SELECT * FROM ${DB_PEDOMETER_TABLE} LEFT JOIN ${DB_WEIGHT_TABLE} on ${DB_PEDOMETER_TABLE}.id=${DB_WEIGHT_TABLE}.id`, [], (_, { rows }) => {
         setTableData(rows["_array"]);
       });
     });
@@ -148,7 +154,7 @@ export const TabScreen3 = ({ navigation }) => {
                       {epochToDate(x.id).toDateString()}
                     </DataTable.Cell>
                     <DataTable.Cell>{x.weight}</DataTable.Cell>
-                    <DataTable.Cell>{x.bmi}</DataTable.Cell>
+                    <DataTable.Cell>{Number((Math.floor((Number(x.weight * 0.453592) / (1.75 * 1.75) * 100))) / 100)}</DataTable.Cell>
                     <DataTable.Cell>{x.steps}</DataTable.Cell>
                   </DataTable.Row>
                 );

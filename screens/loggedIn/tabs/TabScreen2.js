@@ -16,7 +16,6 @@ import { DB_FILE, DB_WEIGHT_TABLE } from "../../../constants";
 
 //changes here.
 import LineChart from "../../../components/LineChart";
-import { useSelector } from "react-redux";
 
 const db = SQLite.openDatabase(DB_FILE);
 
@@ -44,12 +43,10 @@ export const TabScreen2 = ({ navigation }) => {
     const id = getCurrentDateInEpoch();
     db.transaction((tx) => {
       tx.executeSql(
-        `INSERT INTO ${DB_WEIGHT_TABLE} (id, weight) VALUES (${id}, ${data})`,
-        // `INSERT INTO ${DB_WEIGHT_TABLE} (id, weight) VALUES (${id}, ${chartData}); UPDATE ${DB_WEIGHT_TABLE} SET weight = ${chartData} WHERE id = ${id};`,
-        [],
-        (_, { rows }) => console.log("success insert")
+        `REPLACE INTO ${DB_WEIGHT_TABLE}(id,weight) VALUES(${id},${data});`
       );
-    }); 
+    });
+    getData();
   };
 
   useEffect(() => {
@@ -59,11 +56,7 @@ export const TabScreen2 = ({ navigation }) => {
       // const steps = i * 100;
       db.transaction((tx) => {
         tx.executeSql(
-          `INSERT INTO ${DB_WEIGHT_TABLE} (id, weight) VALUES (${id}, ${weight})`,
-          [],
-          (_, { rows }) => {
-            console.log("success " + weight);
-          }
+          `INSERT INTO ${DB_WEIGHT_TABLE} (id, weight) VALUES (${id}, ${weight})`
         );
       });
     }

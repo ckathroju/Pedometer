@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, StatusBar } from "react-native";
+import { StyleSheet, Text, View, StatusBar, ScrollView } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from "@react-navigation/native";
 import * as SQLite from "expo-sqlite";
-import { getCurrentDateInEpoch, epochToDate } from "../../../utils/datetime";
+import {
+  getCurrentDateInEpoch,
+  epochToDate,
+  getDateString,
+} from "../../../utils/datetime";
 import { TextInput, Button, DataTable } from "react-native-paper";
 import { DB_FILE, DB_HEIGHT_TABLE } from "../../../constants";
 const db = SQLite.openDatabase(DB_FILE);
@@ -39,7 +43,7 @@ export const DrawerScreen1 = ({ navigation }) => {
   };
 
   return (
-    <View>
+    <ScrollView>
       <View>
         <StatusBar barStyle={theme.dark ? "dark-content" : "light-content"} />
         <Text style={{ color: colors.text }}>User Health Information</Text>
@@ -67,7 +71,7 @@ export const DrawerScreen1 = ({ navigation }) => {
             return (
               <DataTable.Row key={x.id}>
                 <DataTable.Cell>
-                  {epochToDate(x.id).toDateString()}
+                  {getDateString(epochToDate(x.id))}
                 </DataTable.Cell>
                 <DataTable.Cell>{x.height}</DataTable.Cell>
               </DataTable.Row>
@@ -75,38 +79,46 @@ export const DrawerScreen1 = ({ navigation }) => {
           })}
         </DataTable>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const DrawerStack1 = createStackNavigator();
 
-const DrawerStackScreen1 = ({ navigation }) => (
-  <DrawerStack1.Navigator
-    screenOptions={{
-      headerStyle: {
-        backgroundColor: "#8bc34a",
-      },
-      headerTintColor: "#fff",
-    }}
-  >
-    <DrawerStack1.Screen
-      name="Drawer1"
-      component={DrawerScreen1}
-      options={{
-        title: "Health Information",
-        headerLeft: () => (
-          <Icon.Button
-            name="menu"
-            size={25}
-            backgroundColor="#8bc34a"
-            onPress={() => navigation.openDrawer()}
-          ></Icon.Button>
-        ),
+const DrawerStackScreen1 = ({ navigation }) => {
+  const theme = useTheme();
+
+  const color = theme.dark
+    ? theme.colors.darkMode.status
+    : theme.colors.lightMode.status;
+
+  return (
+    <DrawerStack1.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: color,
+        },
+        headerTintColor: "#fff",
       }}
-    />
-  </DrawerStack1.Navigator>
-);
+    >
+      <DrawerStack1.Screen
+        name="Drawer1"
+        component={DrawerScreen1}
+        options={{
+          title: "Health Information",
+          headerLeft: () => (
+            <Icon.Button
+              name="menu"
+              size={25}
+              backgroundColor={color}
+              onPress={() => navigation.openDrawer()}
+            ></Icon.Button>
+          ),
+        }}
+      />
+    </DrawerStack1.Navigator>
+  );
+};
 
 export default DrawerStackScreen1;
 

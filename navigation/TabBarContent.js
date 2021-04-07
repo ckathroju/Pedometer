@@ -13,6 +13,7 @@ const iconMap = {
 
 const TabBarContent = ({ state, descriptors, navigation }) => {
   const { colors } = useTheme();
+  const theme = useTheme();
   const routes = state.routes.filter((x) => visibleTabs.includes(x.name));
   const currentTabKey = state.history[state.history.length - 1].key;
   const currentTab = currentTab
@@ -27,12 +28,16 @@ const TabBarContent = ({ state, descriptors, navigation }) => {
     return null;
   }
 
+  const color = theme.dark
+    ? theme.colors.darkMode.status
+    : theme.colors.lightMode.status;
+
   return (
     <View
       style={{
         flexDirection: "row",
         justifyContent: "center",
-        backgroundColor: tabBackgroundColor,
+        backgroundColor: color,
         paddingVertical: 5,
       }}
     >

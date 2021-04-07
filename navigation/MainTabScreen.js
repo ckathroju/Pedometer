@@ -13,6 +13,7 @@ import DrawerStackScreen1 from "../screens/loggedIn/drawer/DrawerScreen1";
 const Tab = createBottomTabNavigator();
 
 const MainTabScreen = () => {
+  const theme = useTheme();
   const { colors } = useTheme();
   return (
     <Tab.Navigator
@@ -25,7 +26,9 @@ const MainTabScreen = () => {
         component={PedometerStackScreen}
         options={{
           tabBarLabel: "Pedometer",
-          tabBarColor: colors.tabs.pedometer,
+          tabBarColor: theme.dark
+            ? theme.colors.darkMode.status
+            : theme.colors.lightMode.status,
           tabBarIcon: ({ color }) => (
             <Icon name="cards-outline" color={color} size={26} />
           ),
@@ -36,7 +39,9 @@ const MainTabScreen = () => {
         component={TabStackScreen2}
         options={{
           tabBarLabel: "Weight",
-          tabBarColor: colors.tabs.tab2,
+          tabBarColor: theme.dark
+            ? theme.colors.darkMode.status
+            : theme.colors.lightMode.status,
           tabBarIcon: ({ color }) => (
             <Icon name="weight-pound" color={color} size={26} />
           ),
@@ -47,20 +52,11 @@ const MainTabScreen = () => {
         component={TabStackScreen3}
         options={{
           tabBarLabel: "Trends",
-          tabBarColor: colors.tabs.tab3,
+          tabBarColor: theme.dark
+            ? theme.colors.darkMode.status
+            : theme.colors.lightMode.status,
           tabBarIcon: ({ color }) => (
             <Icon name="thumb-up-outline" color={color} size={26} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Tab4"
-        component={TabStackScreen4}
-        options={{
-          tabBarLabel: "Tab4",
-          tabBarColor: colors.tabs.tab4,
-          tabBarIcon: ({ color }) => (
-            <Icon name="thumb-down-outline" color={color} size={26} />
           ),
         }}
       />

@@ -23,6 +23,20 @@ const ThemeExtras = {
     tab3: "#2196f3",
     tab4: "#3f51b5",
   },
+  lightMode: {
+    status: "#98C0EF",
+    circleSuccess: "#295771",
+    circleMFail: "#031E2D",
+    barChart: "#031E2D",
+    background: "#FFFFFF",
+  },
+  darkMode: {
+    status: "#002031",
+    circleSuccess: "#98C0EF",
+    circleMFail: "#FFFFFF",
+    barChart: "#FFFFFF",
+    background: "#295771",
+  },
 };
 
 export const CustomDefaultTheme = {

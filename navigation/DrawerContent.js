@@ -16,6 +16,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import avatar from "../assets/avatar.png";
 import { AuthContext } from "../contexts/context";
 import { useSelector } from "react-redux";
+import AsyncStorage from "@react-native-community/async-storage";
 
 const DrawerContent = (props) => {
   const { signOut, toggleTheme } = useContext(AuthContext);
@@ -27,6 +28,17 @@ const DrawerContent = (props) => {
     (state) => state.pedometer.currentAppStepCount
   );
 
+  const [userDetails, setUserDetails] = React.useState({
+    name: null,
+    email: null,
+  });
+
+  React.useEffect(async () => {
+    const name = await AsyncStorage.getItem("name");
+    const email = await AsyncStorage.getItem("email");
+    setUserDetails({ name, email });
+  }, []);
+
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
@@ -35,8 +47,8 @@ const DrawerContent = (props) => {
             <View style={{ flexDirection: "row", marginTop: 15 }}>
               <Avatar.Image source={avatar} size={50} />
               <View style={{ flexDirection: "column", marginLeft: 15 }}>
-                <Title style={styles.title}>Name</Title>
-                <Caption style={styles.caption}>Email/ID</Caption>
+                <Title style={styles.title}>{userDetails.name}</Title>
+                <Caption style={styles.caption}>{userDetails.email}</Caption>
               </View>
             </View>
             <View style={styles.row}>

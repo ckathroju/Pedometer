@@ -49,7 +49,9 @@ export const DrawerScreen2 = ({ navigation }) => {
       <Text style={{ color: colors.text }}>
         Set the time you want to be reminded to enter your weight daily:
       </Text>
-      <Button onPress={() => setShow(true)}>Set time</Button>
+      <Button onPress={() => setShow(true)} mode="contained">
+        Set time
+      </Button>
       {show && (
         <DateTimePicker
           testID="dateTimePicker"
@@ -66,32 +68,40 @@ export const DrawerScreen2 = ({ navigation }) => {
 
 const DrawerStack2 = createStackNavigator();
 
-const DrawerStackScreen2 = ({ navigation }) => (
-  <DrawerStack2.Navigator
-    screenOptions={{
-      headerStyle: {
-        backgroundColor: "#8bc34a",
-      },
-      headerTintColor: "#fff",
-    }}
-  >
-    <DrawerStack2.Screen
-      name="Drawer2"
-      component={DrawerScreen2}
-      options={{
-        title: "Notifications",
-        headerLeft: () => (
-          <Icon.Button
-            name="menu"
-            size={25}
-            backgroundColor="#8bc34a"
-            onPress={() => navigation.openDrawer()}
-          ></Icon.Button>
-        ),
+const DrawerStackScreen2 = ({ navigation }) => {
+  const theme = useTheme();
+
+  const color = theme.dark
+    ? theme.colors.darkMode.status
+    : theme.colors.lightMode.status;
+
+  return (
+    <DrawerStack2.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: color,
+        },
+        headerTintColor: "#fff",
       }}
-    />
-  </DrawerStack2.Navigator>
-);
+    >
+      <DrawerStack2.Screen
+        name="Drawer2"
+        component={DrawerScreen2}
+        options={{
+          title: "Notifications",
+          headerLeft: () => (
+            <Icon.Button
+              name="menu"
+              size={25}
+              backgroundColor={color}
+              onPress={() => navigation.openDrawer()}
+            ></Icon.Button>
+          ),
+        }}
+      />
+    </DrawerStack2.Navigator>
+  );
+};
 
 export default DrawerStackScreen2;
 

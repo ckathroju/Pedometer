@@ -8,6 +8,8 @@ import {
   epochToDate,
   getPreviousDate,
   dateToEpoch,
+  getDateString,
+  getDateMonthString,
 } from "../../../utils/datetime";
 import * as SQLite from "expo-sqlite";
 import { TextInput, Button, DataTable } from "react-native-paper";
@@ -33,9 +35,13 @@ export const TabScreen2 = ({ navigation }) => {
   const getData = () => {
     const id = getCurrentDateInEpoch();
     db.transaction((tx) => {
-      tx.executeSql(`SELECT * FROM ${DB_WEIGHT_TABLE}`, [], (_, { rows }) => {
-        setTableData(rows["_array"]);
-      });
+      tx.executeSql(
+        `SELECT * FROM ${DB_WEIGHT_TABLE} ORDER BY id DESC`,
+        [],
+        (_, { rows }) => {
+          setTableData(rows["_array"]);
+        }
+      );
     });
   };
 
@@ -63,41 +69,72 @@ export const TabScreen2 = ({ navigation }) => {
   });
 
   useEffect(() => {
-    const id = dateToEpoch(getPreviousDate(6));
     db.transaction((tx) => {
-      tx.executeSql(
-        `select * from ${DB_WEIGHT_TABLE} WHERE id >= ${id}`,
-        [],
-        (_, { rows }) => {
-          setChartData(
-            rows["_array"].map((x) => ({
-              y: Number(x.weight),
-              x: epochToDate(x["id"]),
-            }))
-          );
-        }
-      );
+      tx.executeSql(`select * from ${DB_WEIGHT_TABLE}`, [], (_, { rows }) => {
+        setChartData(
+          rows["_array"].map((x) => ({
+            y: Number(x.weight),
+            x: getDateMonthString(epochToDate(x["id"])),
+          }))
+        );
+      });
     });
   }, []);
+
+  const [tabView, setTabView] = useState("TABLE");
+
+  const createTabTextStyles = (tabName) => {
+    return {
+      textAlignVertical: "center",
+      textDecorationLine: tabView === tabName ? "underline" : null,
+      fontWeight: tabView === tabName ? "bold" : null,
+      fontSize: tabView === tabName ? 25 : 20,
+      color: theme.dark ? "white" : "black",
+    };
+  };
 
   return (
     <ScrollView>
       <View>
         <View>
           <StatusBar barStyle={theme.dark ? "dark-content" : "light-content"} />
-          <Text style={{ color: colors.text }}>Enter your weight today:</Text>
-          <TextInput
-            label="Weight"
-            value={data}
-            onChangeText={(text) => setData(text)}
-            keyboardType="decimal-pad"
-          />
-          <Button mode="contained" onPress={() => saveData()}>
-            Save Weight
-          </Button>
+          <View
+            style={{
+              backgroundColor: theme.dark
+                ? theme.colors.darkMode.background
+                : "#D2EAFF",
+              height: 50,
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-around",
+            }}
+          >
+            <Text
+              style={createTabTextStyles("TABLE")}
+              onPress={() => setTabView("TABLE")}
+            >
+              Table View
+            </Text>
+            <Text
+              style={createTabTextStyles("CHART")}
+              onPress={() => setTabView("CHART")}
+            >
+              Chart View
+            </Text>
+          </View>
         </View>
-        <View>
+        {tabView === "TABLE" && (
           <View>
+            <Text style={{ color: colors.text }}>Enter your weight today:</Text>
+            <TextInput
+              label="Weight"
+              value={data}
+              onChangeText={(text) => setData(text)}
+              keyboardType="decimal-pad"
+            />
+            <Button mode="contained" onPress={() => saveData()}>
+              Save Weight
+            </Button>
             <DataTable>
               <DataTable.Header>
                 <DataTable.Title>Date</DataTable.Title>
@@ -107,7 +144,7 @@ export const TabScreen2 = ({ navigation }) => {
                 return (
                   <DataTable.Row key={x.id}>
                     <DataTable.Cell>
-                      {epochToDate(x.id).toDateString()}
+                      {getDateString(epochToDate(x.id))}
                     </DataTable.Cell>
                     <DataTable.Cell>{x.weight}</DataTable.Cell>
                   </DataTable.Row>
@@ -115,8 +152,8 @@ export const TabScreen2 = ({ navigation }) => {
               })}
             </DataTable>
           </View>
-        </View>
-        <LineChart data={chartData} />
+        )}
+        {tabView === "CHART" && <LineChart data={chartData} height={600} />}
       </View>
     </ScrollView>
   );
@@ -126,12 +163,17 @@ const TabStack2 = createStackNavigator();
 
 const TabStackScreen2 = ({ navigation }) => {
   const { colors } = useTheme();
+  const theme = useTheme();
+
+  const color = theme.dark
+    ? theme.colors.darkMode.status
+    : theme.colors.lightMode.status;
 
   return (
     <TabStack2.Navigator
       screenOptions={{
         headerStyle: {
-          backgroundColor: colors.tabs.tab2,
+          backgroundColor: color,
         },
         headerTintColor: colors.components.headerTintColor,
       }}
@@ -145,7 +187,7 @@ const TabStackScreen2 = ({ navigation }) => {
             <Icon.Button
               name="menu"
               size={25}
-              backgroundColor={colors.tabs.tab2}
+              backgroundColor={color}
               onPress={() => navigation.openDrawer()}
             ></Icon.Button>
           ),

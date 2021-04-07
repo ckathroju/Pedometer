@@ -12,6 +12,7 @@ import { AuthContext } from "../contexts/context";
 import AsyncStorage from "@react-native-community/async-storage";
 import Server from "../utils/Server";
 import { getFromDb } from "../utils/sql";
+import { deleteDBData } from "../utils/sqlite";
 
 const Drawer = createDrawerNavigator();
 
@@ -65,7 +66,9 @@ const RootContainer = () => {
               userToken = response.headers["auth-token"];
               await AsyncStorage.setItem("userToken", userToken);
               await AsyncStorage.setItem("email", email);
+              await AsyncStorage.setItem("name", response.data.name);
               dispatch({ type: "LOGIN", id: email, token: userToken });
+              deleteDBData();
               getFromDb();
             } else {
               Alert.alert("Email not verified", response.data.message, [

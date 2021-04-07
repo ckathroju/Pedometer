@@ -21,28 +21,42 @@ export const TabScreen3 = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [weight, setWeight] = useState([]);
   const [steps, setSteps] = useState([]);
-  const [visibleView, setVisibleView] = useState('BMI') // 'BMI', 'WEIGHT', 'STEPS'
+  const [visibleView, setVisibleView] = useState('BMI'); // 'BMI', 'WEIGHT', 'STEPS'
+  const [sortBy, setSortBy] = useState('STEPS');
+  const [ascDesc, setAscDesc] = useState('DESC')
 
   const [tableData, setTableData] = useState([]);
+  const [tableWeight, setTableWeight] = useState([]);
+  const [tableSteps, setTableSteps] = useState([]);
 
-  // const [tableData, setTableData] = useState({
-  //   weight: [],
-  //   steps: [],
-  //   bmi: []
-  // });
 
   useEffect(() => {
     getData();
   }, []);
 
+  useEffect(() => {
+    getData()
+  }, [sortBy, ascDesc])
+
   const getData = () => {
-    const id = getCurrentDateInEpoch();
+    let sortString = null
+    if (sortBy === 'STEPS') {
+      sortString = `ORDER BY CAST(${DB_PEDOMETER_TABLE}.steps as unsigned) ${ascDesc}`
+    }
+    else if (sortBy === 'BMI' || sortBy === 'WEIGHT') {
+      sortString = `ORDER BY CAST(${DB_WEIGHT_TABLE}.weight as unsigned) ${ascDesc}`
+    }
+    else if(sortBy === 'ID') {
+      sortString = `ORDER BY ${DB_PEDOMETER_TABLE}.id ${ascDesc}`
+    }
     db.transaction((tx) => {
-      tx.executeSql(`SELECT * FROM ${DB_PEDOMETER_TABLE} LEFT JOIN ${DB_WEIGHT_TABLE} on ${DB_PEDOMETER_TABLE}.id=${DB_WEIGHT_TABLE}.id`, [], (_, { rows }) => {
+      tx.executeSql(`SELECT * FROM ${DB_PEDOMETER_TABLE} LEFT JOIN ${DB_WEIGHT_TABLE} on ${DB_PEDOMETER_TABLE}.id=${DB_WEIGHT_TABLE}.id ${sortString}`, [], (_, { rows }) => {
         setTableData(rows["_array"]);
       });
     });
   };
+
+
 
   useEffect(() => {
     const id = dateToEpoch(getPreviousDate(6));
@@ -125,19 +139,29 @@ export const TabScreen3 = ({ navigation }) => {
         }
         {visibleView === 'WEIGHT' &&
           <>
-            <Text>Displaying weight over the past week</Text>
+            <Text>Displaying weight over the week</Text>
             <LineChart data={weight} />
             
           </>
         }
         {visibleView === 'STEPS' &&
           <>
-            <Text>Displaying steps over the past week</Text>
+            <Text>Displaying steps throughout the day</Text>
             <LineChart data={steps} />
           </>
         }
       </View>
       <View>
+
+      <View style={styles.buttons}>
+          <Text> Sort the Table by:  </Text>
+          <Button title="BMI" onPress={() => setSortBy('BMI')}/>
+          <Button title="Weight" onPress={() => setSortBy('WEIGHT')} />
+          <Button title="Steps" onPress={() => setSortBy('STEPS')} />
+          
+          {/* <Button title="Ascending" onPress={() => setAscDesc('ASC')} />
+          <Button title="Descending" onPress={() => setAscDesc('DESC')} /> */}
+        </View>
         <View>
           <View>
             <DataTable>

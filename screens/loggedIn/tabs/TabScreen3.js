@@ -4,13 +4,21 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from "@react-navigation/native";
 import * as SQLite from "expo-sqlite";
-import { DB_FILE, DB_WEIGHT_TABLE, DB_HEIGHT_TABLE, DB_PEDOMETER_TABLE } from "../../../constants";
-import LineChart from "../../../components/LineChart"
-import { Line } from "react-chartjs-2";
-import { TextInput, DataTable } from "react-native-paper";
+import {
+  DB_FILE,
+  DB_WEIGHT_TABLE,
+  DB_PEDOMETER_TABLE,
+} from "../../../constants";
+import LineChart from "../../../components/LineChart";
+import { DataTable } from "react-native-paper";
 
-import { epochToDate, dateToEpoch, getPreviousDate, getCurrentDateInEpoch, getCurrentDate } from "../../../utils/datetime";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import {
+  epochToDate,
+  dateToEpoch,
+  getPreviousDate,
+  getCurrentDateInEpoch,
+} from "../../../utils/datetime";
+import { ScrollView } from "react-native-gesture-handler";
 
 const db = SQLite.openDatabase(DB_FILE);
 
@@ -21,42 +29,41 @@ export const TabScreen3 = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [weight, setWeight] = useState([]);
   const [steps, setSteps] = useState([]);
-  const [visibleView, setVisibleView] = useState('BMI'); // 'BMI', 'WEIGHT', 'STEPS'
-  const [sortBy, setSortBy] = useState('STEPS');
-  const [ascDesc, setAscDesc] = useState('DESC')
+  const [visibleView, setVisibleView] = useState("BMI"); // 'BMI', 'WEIGHT', 'STEPS'
+  const [sortBy, setSortBy] = useState("STEPS");
+  const [ascDesc, setAscDesc] = useState("DESC");
 
   const [tableData, setTableData] = useState([]);
   const [tableWeight, setTableWeight] = useState([]);
   const [tableSteps, setTableSteps] = useState([]);
-
 
   useEffect(() => {
     getData();
   }, []);
 
   useEffect(() => {
-    getData()
-  }, [sortBy, ascDesc])
+    getData();
+  }, [sortBy, ascDesc]);
 
   const getData = () => {
-    let sortString = null
-    if (sortBy === 'STEPS') {
-      sortString = `ORDER BY CAST(${DB_PEDOMETER_TABLE}.steps as unsigned) ${ascDesc}`
-    }
-    else if (sortBy === 'BMI' || sortBy === 'WEIGHT') {
-      sortString = `ORDER BY CAST(${DB_WEIGHT_TABLE}.weight as unsigned) ${ascDesc}`
-    }
-    else if(sortBy === 'ID') {
-      sortString = `ORDER BY ${DB_PEDOMETER_TABLE}.id ${ascDesc}`
+    let sortString = null;
+    if (sortBy === "STEPS") {
+      sortString = `ORDER BY CAST(${DB_PEDOMETER_TABLE}.steps as unsigned) ${ascDesc}`;
+    } else if (sortBy === "BMI" || sortBy === "WEIGHT") {
+      sortString = `ORDER BY CAST(${DB_WEIGHT_TABLE}.weight as unsigned) ${ascDesc}`;
+    } else if (sortBy === "ID") {
+      sortString = `ORDER BY ${DB_PEDOMETER_TABLE}.id ${ascDesc}`;
     }
     db.transaction((tx) => {
-      tx.executeSql(`SELECT * FROM ${DB_PEDOMETER_TABLE} LEFT JOIN ${DB_WEIGHT_TABLE} on ${DB_PEDOMETER_TABLE}.id=${DB_WEIGHT_TABLE}.id ${sortString}`, [], (_, { rows }) => {
-        setTableData(rows["_array"]);
-      });
+      tx.executeSql(
+        `SELECT * FROM ${DB_PEDOMETER_TABLE} LEFT JOIN ${DB_WEIGHT_TABLE} on ${DB_PEDOMETER_TABLE}.id=${DB_WEIGHT_TABLE}.id ${sortString}`,
+        [],
+        (_, { rows }) => {
+          setTableData(rows["_array"]);
+        }
+      );
     });
   };
-
-
 
   useEffect(() => {
     const id = dateToEpoch(getPreviousDate(6));
@@ -67,8 +74,12 @@ export const TabScreen3 = ({ navigation }) => {
         (_, { rows }) => {
           setData(
             rows["_array"].map((x) => ({
-              // bmi formula is kg/m^2 
-              y: Number((Math.floor((Number(x.weight * 0.453592) / (1.75 * 1.75) * 100))) / 100),
+              // bmi formula is kg/m^2
+              y: Number(
+                Math.floor(
+                  (Number(x.weight * 0.453592) / (1.75 * 1.75)) * 100
+                ) / 100
+              ),
               x: epochToDate(x["id"]),
               // labels: x.steps,
             }))
@@ -87,10 +98,8 @@ export const TabScreen3 = ({ navigation }) => {
         (_, { rows }) => {
           setWeight(
             rows["_array"].map((x) => ({
-
               y: Number(x.weight),
               x: epochToDate(x["id"]),
-
             }))
           );
         }
@@ -117,8 +126,6 @@ export const TabScreen3 = ({ navigation }) => {
     });
   }, []);
 
-
-
   return (
     <ScrollView>
       <View>
@@ -126,39 +133,37 @@ export const TabScreen3 = ({ navigation }) => {
       </View>
       <View style={styles.container}>
         <View style={styles.buttons}>
-          <Button title="BMI" onPress={() => setVisibleView('BMI')}/>
-          <Button title="Weight" onPress={() => setVisibleView('WEIGHT')} />
-          <Button title="Steps" onPress={() => setVisibleView('STEPS')} />
+          <Button title="BMI" onPress={() => setVisibleView("BMI")} />
+          <Button title="Weight" onPress={() => setVisibleView("WEIGHT")} />
+          <Button title="Steps" onPress={() => setVisibleView("STEPS")} />
         </View>
-        
-        {visibleView === 'BMI' &&
+
+        {visibleView === "BMI" && (
           <>
             <Text>Displaying BMI over the past week</Text>
             <LineChart data={data} />
           </>
-        }
-        {visibleView === 'WEIGHT' &&
+        )}
+        {visibleView === "WEIGHT" && (
           <>
             <Text>Displaying weight over the week</Text>
             <LineChart data={weight} />
-            
           </>
-        }
-        {visibleView === 'STEPS' &&
+        )}
+        {visibleView === "STEPS" && (
           <>
             <Text>Displaying steps throughout the day</Text>
             <LineChart data={steps} />
           </>
-        }
+        )}
       </View>
       <View>
+        <View style={styles.buttons}>
+          <Text> Sort the Table by: </Text>
+          <Button title="BMI" onPress={() => setSortBy("BMI")} />
+          <Button title="Weight" onPress={() => setSortBy("WEIGHT")} />
+          <Button title="Steps" onPress={() => setSortBy("STEPS")} />
 
-      <View style={styles.buttons}>
-          <Text> Sort the Table by:  </Text>
-          <Button title="BMI" onPress={() => setSortBy('BMI')}/>
-          <Button title="Weight" onPress={() => setSortBy('WEIGHT')} />
-          <Button title="Steps" onPress={() => setSortBy('STEPS')} />
-          
           {/* <Button title="Ascending" onPress={() => setAscDesc('ASC')} />
           <Button title="Descending" onPress={() => setAscDesc('DESC')} /> */}
         </View>
@@ -172,13 +177,18 @@ export const TabScreen3 = ({ navigation }) => {
                 <DataTable.Title>Steps</DataTable.Title>
               </DataTable.Header>
               {tableData.map((x) => {
+                const bmi = Number(
+                  Math.floor(
+                    (Number(x.weight * 0.453592) / (1.75 * 1.75)) * 100
+                  ) / 100
+                );
                 return (
                   <DataTable.Row key={x.id}>
                     <DataTable.Cell>
                       {epochToDate(x.id).toDateString()}
                     </DataTable.Cell>
                     <DataTable.Cell>{x.weight}</DataTable.Cell>
-                    <DataTable.Cell>{Number((Math.floor((Number(x.weight * 0.453592) / (1.75 * 1.75) * 100))) / 100)}</DataTable.Cell>
+                    <DataTable.Cell>{bmi === 0 ? null : bmi}</DataTable.Cell>
                     <DataTable.Cell>{x.steps}</DataTable.Cell>
                   </DataTable.Row>
                 );
@@ -188,7 +198,6 @@ export const TabScreen3 = ({ navigation }) => {
         </View>
       </View>
     </ScrollView>
-    
   );
 };
 
@@ -234,11 +243,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   buttons: {
-
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     paddingTop: 10,
-    paddingBottom: 20
-  }
+    paddingBottom: 20,
+  },
 });

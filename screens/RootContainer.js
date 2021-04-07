@@ -11,6 +11,7 @@ import { ActivityIndicator } from "react-native-paper";
 import { AuthContext } from "../contexts/context";
 import AsyncStorage from "@react-native-community/async-storage";
 import Server from "../utils/Server";
+import { getFromDb } from "../utils/sql";
 
 const Drawer = createDrawerNavigator();
 
@@ -63,7 +64,9 @@ const RootContainer = () => {
             if (response.data.emailVerified) {
               userToken = response.headers["auth-token"];
               await AsyncStorage.setItem("userToken", userToken);
+              await AsyncStorage.setItem("email", email);
               dispatch({ type: "LOGIN", id: email, token: userToken });
+              getFromDb();
             } else {
               Alert.alert("Email not verified", response.data.message, [
                 { text: "Cancel", style: "cancel" },
@@ -95,6 +98,7 @@ const RootContainer = () => {
       signOut: async () => {
         try {
           await AsyncStorage.removeItem("userToken");
+          await AsyncStorage.removeItem("email");
         } catch (e) {
           // console.log(e);
         }

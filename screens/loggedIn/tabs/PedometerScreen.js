@@ -38,16 +38,9 @@ export const PedometerScreen = ({ navigation }) => {
     for (let i = 0; i < 10; i++) {
       const id = dateToEpoch(getPreviousDate(i));
       const steps = Math.floor(Math.random() * 10000);
-      // const steps = i * 100;
       db.transaction((tx) => {
         tx.executeSql(
-          // `UPDATE ${DB_PEDOMETER_TABLE} SET steps = ${steps} WHERE id = ${id};`,
-          `INSERT INTO ${DB_PEDOMETER_TABLE} (id, steps) VALUES (${id}, ${steps}); UPDATE ${DB_PEDOMETER_TABLE} SET steps = ${steps} WHERE id = ${id};`,
-          // `INSERT INTO ${DB_PEDOMETER_TABLE} (id, steps) VALUES (${id}, ${steps})`,
-          [],
-          (_, { rows }) => {
-            console.log("success " + steps);
-          }
+          `REPLACE INTO ${DB_PEDOMETER_TABLE}(id,steps) VALUES(${id},${steps});`
         );
       });
     }

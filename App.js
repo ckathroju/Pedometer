@@ -3,37 +3,29 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/es/integration/react";
 import configureStore from "./store/configureStore";
 import RootContainer from "./screens/RootContainer";
-import * as SQLite from "expo-sqlite";
-import {
-  DB_FILE,
-  DB_PEDOMETER_TABLE,
-  DB_WEIGHT_TABLE,
-  DB_HEIGHT_TABLE,
-} from "./constants";
-
-// import LineChart from "./components/LineChart";
-
-const db = SQLite.openDatabase(DB_FILE);
+import useAppState from "react-native-appstate-hook";
+import { GENERATE_MOCK_DATA, DELETE_DB_DATA } from "./constants";
+import { populateMockData, deleteDBData, createTables } from "./utils/sqlite";
+import { saveToDb, getFromDb } from "./utils/sql";
 
 const App = () => {
   const { store, persistor } = configureStore();
+  useAppState({
+    onForeground: () => getFromDb(),
+    onBackground: () => saveToDb(),
+  });
 
   useEffect(() => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        `create table if not exists ${DB_PEDOMETER_TABLE} (id integer primary key not null, steps text);`
-      );
-    });
-    db.transaction((tx) => {
-      tx.executeSql(
-        `create table if not exists ${DB_WEIGHT_TABLE} (id integer primary key not null, weight text);`
-      );
-    });
-    db.transaction((tx) => {
-      tx.executeSql(
-        `create table if not exists ${DB_HEIGHT_TABLE} (id integer primary key not null, height text);`
-      );
-    });
+    createTables();
+    getFromDb();
+
+    if (GENERATE_MOCK_DATA) {
+      populateMockData();
+    }
+
+    if (DELETE_DB_DATA) {
+      deleteDBData();
+    }
   }, []);
 
   return (
@@ -44,15 +36,5 @@ const App = () => {
     </Provider>
   );
 };
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <div className='chart'>
-//         <LineChart />
-//       </div>
-//     </div>
-//   )
-// }
 
 export default App;

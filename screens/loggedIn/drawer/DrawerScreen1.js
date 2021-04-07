@@ -22,7 +22,6 @@ export const DrawerScreen1 = ({ navigation }) => {
   const getData = () => {
     db.transaction((tx) => {
       tx.executeSql(`SELECT * FROM ${DB_HEIGHT_TABLE}`, [], (_, { rows }) => {
-        console.log(JSON.stringify(rows["_array"]));
         setTableData(rows["_array"]);
       });
     });
@@ -33,10 +32,7 @@ export const DrawerScreen1 = ({ navigation }) => {
     const id = getCurrentDateInEpoch();
     db.transaction((tx) => {
       tx.executeSql(
-        `INSERT INTO ${DB_HEIGHT_TABLE} (id, height) VALUES (${id}, ${data}) ON DUPLICATE KEY UPDATE height = ${data}; UPDATE ${DB_HEIGHT_TABLE} SET height = ${data} WHERE id = ${id};`,
-        // `UPDATE ${DB_HEIGHT_TABLE} SET height = ${data} WHERE id = ${id}`,
-        [],
-        (_, { rows }) => console.log("success replace")
+        `REPLACE INTO ${DB_HEIGHT_TABLE}(id,height) VALUES(${id},${data});`
       );
     });
     getData();

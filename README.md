@@ -1,4 +1,4 @@
-# PedometerAPP
+# Pedometer - Health & Fitness Android App
  
 1. Install Node.js - https://nodejs.org/en/
 2. Install Expo - npm install --global expo-cli
